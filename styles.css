@@ -1,24 +1,36 @@
 :root {
-  --bg: #0b0f17;
-  --bg-elev: rgba(255, 255, 255, 0.06);
-  --text: rgba(255, 255, 255, 0.92);
-  --muted: rgba(255, 255, 255, 0.68);
-  --line: rgba(255, 255, 255, 0.12);
-  --brand: #7c5cff;
-  --brand-2: #22d3ee;
-  --shadow: 0 14px 34px rgba(0, 0, 0, 0.35);
+  --bg: #f5f5f7;
+  --bg-2: #ffffff;
+  --bg-elev: rgba(0, 0, 0, 0.03);
+  --text: rgba(29, 29, 31, 0.92);
+  --muted: rgba(29, 29, 31, 0.66);
+  --line: rgba(210, 210, 215, 0.9);
+  --brand: #0071e3;
+  --brand-2: #0a84ff;
+  --shadow: 0 18px 45px rgba(0, 0, 0, 0.10);
   --radius: 16px;
-  --container: 1120px;
-  --font: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --container: 980px;
+  --font: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
 }
 
 html[data-theme="light"] {
-  --bg: #f7f8fb;
-  --bg-elev: rgba(0, 0, 0, 0.04);
-  --text: rgba(0, 0, 0, 0.88);
-  --muted: rgba(0, 0, 0, 0.66);
-  --line: rgba(0, 0, 0, 0.12);
-  --shadow: 0 14px 34px rgba(0, 0, 0, 0.12);
+  --bg: #f5f5f7;
+  --bg-2: #ffffff;
+  --bg-elev: rgba(0, 0, 0, 0.03);
+  --text: rgba(29, 29, 31, 0.92);
+  --muted: rgba(29, 29, 31, 0.66);
+  --line: rgba(210, 210, 215, 0.9);
+  --shadow: 0 18px 45px rgba(0, 0, 0, 0.10);
+}
+
+html[data-theme="dark"] {
+  --bg: #000000;
+  --bg-2: #0b0b0f;
+  --bg-elev: rgba(255, 255, 255, 0.07);
+  --text: rgba(255, 255, 255, 0.92);
+  --muted: rgba(255, 255, 255, 0.70);
+  --line: rgba(255, 255, 255, 0.14);
+  --shadow: 0 18px 45px rgba(0, 0, 0, 0.42);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -43,11 +55,12 @@ body {
 body {
   margin: 0;
   font-family: var(--font);
-  background: radial-gradient(1200px 600px at 20% 0%, rgba(124, 92, 255, 0.18), transparent 55%),
-    radial-gradient(900px 520px at 85% 10%, rgba(34, 211, 238, 0.12), transparent 55%),
+  background: radial-gradient(900px 520px at 20% 0%, rgba(0, 113, 227, 0.10), transparent 55%),
+    radial-gradient(900px 520px at 95% 10%, rgba(10, 132, 255, 0.08), transparent 55%),
     var(--bg);
   color: var(--text);
   line-height: 1.6;
+  letter-spacing: -0.1px;
 }
 
 a {
@@ -71,7 +84,7 @@ img {
   top: 12px;
   padding: 10px 12px;
   border-radius: 999px;
-  background: var(--bg);
+  background: var(--bg-2);
   border: 1px solid var(--line);
   box-shadow: var(--shadow);
   transform: translateY(-140%);
@@ -86,7 +99,7 @@ img {
   top: 0;
   z-index: 20;
   backdrop-filter: saturate(140%) blur(12px);
-  background: color-mix(in srgb, var(--bg) 76%, transparent);
+  background: color-mix(in srgb, var(--bg-2) 72%, transparent);
   border-bottom: 1px solid var(--line);
 }
 
@@ -103,7 +116,7 @@ img {
   align-items: center;
   gap: 10px;
   font-weight: 700;
-  letter-spacing: 0.2px;
+  letter-spacing: -0.2px;
 }
 
 .brand-mark {
@@ -130,6 +143,7 @@ img {
 
 .nav-cta {
   border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--bg-elev) 45%, transparent);
   color: var(--text) !important;
 }
 
@@ -138,7 +152,7 @@ img {
   align-items: center;
   gap: 10px;
   border: 1px solid var(--line);
-  background: var(--bg-elev);
+  background: color-mix(in srgb, var(--bg-elev) 55%, transparent);
   color: var(--text);
   border-radius: 999px;
   padding: 8px 12px;
@@ -160,7 +174,7 @@ img {
 }
 
 .hero {
-  padding: 66px 0 36px;
+  padding: 84px 0 48px;
 }
 
 .hero-inner {
@@ -175,16 +189,16 @@ img {
   padding: 6px 10px;
   border-radius: 999px;
   border: 1px solid var(--line);
-  background: var(--bg-elev);
+  background: color-mix(in srgb, var(--bg-elev) 55%, transparent);
   color: var(--muted);
   font-size: 13px;
 }
 
 .hero-title {
-  font-size: clamp(30px, 4vw, 48px);
+  font-size: clamp(34px, 4.5vw, 56px);
   line-height: 1.18;
   margin: 0;
-  letter-spacing: -0.6px;
+  letter-spacing: -1px;
 }
 
 .hero-lead {
@@ -211,9 +225,9 @@ img {
   align-items: center;
   justify-content: center;
   padding: 11px 14px;
-  border-radius: 12px;
+  border-radius: 999px;
   border: 1px solid var(--line);
-  background: transparent;
+  background: color-mix(in srgb, var(--bg-2) 86%, transparent);
   color: var(--text);
   font-weight: 600;
   letter-spacing: 0.2px;
@@ -222,8 +236,13 @@ img {
 
 .button.primary {
   border-color: color-mix(in srgb, var(--brand) 42%, var(--line));
-  background: linear-gradient(135deg, rgba(124, 92, 255, 0.95), rgba(34, 211, 238, 0.55));
-  box-shadow: var(--shadow);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--brand-2) 92%, white), var(--brand));
+  color: white;
+  box-shadow: 0 12px 28px rgba(0, 113, 227, 0.22);
+}
+
+.button.primary:hover {
+  filter: brightness(0.98);
 }
 
 .button.ghost:hover {
@@ -241,7 +260,7 @@ img {
 .hero-point {
   padding: 14px 14px;
   border-radius: var(--radius);
-  background: var(--bg-elev);
+  background: var(--bg-2);
   border: 1px solid var(--line);
 }
 
@@ -262,7 +281,7 @@ img {
 .section.alt {
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
-  background: color-mix(in srgb, var(--bg-elev) 50%, transparent);
+  background: color-mix(in srgb, var(--bg-2) 65%, transparent);
 }
 
 .section-head {
@@ -299,7 +318,7 @@ img {
   padding: 18px;
   border-radius: var(--radius);
   border: 1px solid var(--line);
-  background: var(--bg-elev);
+  background: var(--bg-2);
   box-shadow: 0 0 0 rgba(0, 0, 0, 0);
   transition: transform 160ms ease, box-shadow 160ms ease;
 }
@@ -326,8 +345,9 @@ img {
 }
 
 .list a {
+  color: color-mix(in srgb, var(--brand) 92%, var(--text));
   text-decoration: underline;
-  text-decoration-color: color-mix(in srgb, var(--muted) 55%, transparent);
+  text-decoration-color: color-mix(in srgb, var(--brand) 55%, transparent);
   text-underline-offset: 3px;
 }
 
@@ -346,7 +366,7 @@ img {
   padding: 18px;
   border-radius: var(--radius);
   border: 1px solid var(--line);
-  background: var(--bg-elev);
+  background: var(--bg-2);
 }
 
 .about-card h3 {
@@ -364,7 +384,7 @@ img {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   overflow: hidden;
-  background: var(--bg-elev);
+  background: var(--bg-2);
 }
 
 .kv--table > div {
@@ -471,7 +491,7 @@ img {
   }
 
   .hero {
-    padding: 92px 0 54px;
+    padding: 108px 0 62px;
   }
 
   .hero-points {
