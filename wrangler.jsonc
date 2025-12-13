@@ -1,7 +1,7 @@
 {
   // Cloudflare Workers へ静的ファイルとしてデプロイする場合の設定です。
   // `npx wrangler deploy` を実行すると、このディレクトリ配下の静的ファイルを配信します。
-  "name": "janstudio-site",
+  "name": "janstudio",
   "compatibility_date": "2025-12-13",
   "assets": {
     "directory": "."
