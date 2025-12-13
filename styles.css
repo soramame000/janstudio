@@ -277,6 +277,12 @@ img {
   letter-spacing: -0.2px;
 }
 
+.page-title {
+  margin: 0;
+  font-size: clamp(24px, 3vw, 34px);
+  letter-spacing: -0.4px;
+}
+
 .section-head p {
   margin: 0;
   color: var(--muted);
@@ -354,6 +360,25 @@ img {
   margin: 0;
 }
 
+.kv--table {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--bg-elev);
+}
+
+.kv--table > div {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+  padding: 14px 14px;
+  border-top: 1px solid var(--line);
+}
+
+.kv--table > div:first-child {
+  border-top: none;
+}
+
 .kv dt {
   color: var(--muted);
   font-size: 13px;
@@ -362,6 +387,14 @@ img {
 .kv dd {
   margin: 0;
   font-weight: 600;
+}
+
+.prose {
+  max-width: 860px;
+}
+
+.muted {
+  color: var(--muted);
 }
 
 .steps {
