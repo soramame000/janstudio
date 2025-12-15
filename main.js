@@ -1,3 +1,4 @@
+// Theme Management
 function setTheme(nextTheme) {
   const theme = nextTheme === "light" ? "light" : "dark";
   document.documentElement.dataset.theme = theme;
@@ -28,8 +29,8 @@ function setupThemeToggle() {
   });
 }
 
+// Smooth scroll with easing
 function setupSmoothScroll() {
-  document.documentElement.style.scrollBehavior = "smooth";
   document.querySelectorAll('a[href^="#"]').forEach((link) => {
     link.addEventListener("click", (event) => {
       const href = link.getAttribute("href");
@@ -37,8 +38,33 @@ function setupSmoothScroll() {
       const target = document.querySelector(href);
       if (!target) return;
       event.preventDefault();
-      target.scrollIntoView({ block: "start" });
-      history.pushState(null, "", href);
+
+      const targetPosition = target.getBoundingClientRect().top + window.scrollY - 80;
+      const startPosition = window.scrollY;
+      const distance = targetPosition - startPosition;
+      const duration = 800;
+      let startTime = null;
+
+      function easeOutCubic(t) {
+        return 1 - Math.pow(1 - t, 3);
+      }
+
+      function animation(currentTime) {
+        if (startTime === null) startTime = currentTime;
+        const timeElapsed = currentTime - startTime;
+        const progress = Math.min(timeElapsed / duration, 1);
+        const ease = easeOutCubic(progress);
+
+        window.scrollTo(0, startPosition + distance * ease);
+
+        if (timeElapsed < duration) {
+          requestAnimationFrame(animation);
+        } else {
+          history.pushState(null, "", href);
+        }
+      }
+
+      requestAnimationFrame(animation);
     });
   });
 }
@@ -49,9 +75,11 @@ function setupYear() {
   el.textContent = String(new Date().getFullYear());
 }
 
+// Intersection Observer for reveal animations
 function setupReveal() {
   const prefersReduced =
     window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
   if (prefersReduced) {
     document.documentElement.dataset.motion = "reduced";
     return;
@@ -66,57 +94,41 @@ function setupReveal() {
     (entries) => {
       for (const entry of entries) {
         if (!entry.isIntersecting) continue;
-        entry.target.classList.add("is-revealed");
+        // Add staggered delay for child elements
+        const delay = entry.target.dataset.revealDelay || 0;
+        setTimeout(() => {
+          entry.target.classList.add("is-revealed");
+        }, delay);
         io.unobserve(entry.target);
       }
     },
-    { root: null, rootMargin: "0px 0px -10% 0px", threshold: 0.12 }
+    { root: null, rootMargin: "0px 0px -8% 0px", threshold: 0.1 }
   );
 
   for (const el of targets) io.observe(el);
 }
 
-function setupSpotlight() {
-  const prefersReduced =
-    window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const isFinePointer =
-    window.matchMedia && window.matchMedia("(pointer: fine)").matches && window.matchMedia("(hover: hover)").matches;
+// Apple-style smooth card hover with gradient follow
+function setupCardHover() {
+  const cards = document.querySelectorAll(".card, .hero-point");
 
-  if (prefersReduced || !isFinePointer) return;
+  for (const card of cards) {
+    card.addEventListener("pointermove", (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      card.style.setProperty("--cx", `${x}%`);
+      card.style.setProperty("--cy", `${y}%`);
+    });
 
-  let raf = 0;
-  let lastX = 0;
-  let lastY = 0;
-
-  function commit() {
-    raf = 0;
-    const x = `${Math.round(lastX)}px`;
-    const y = `${Math.round(lastY)}px`;
-    document.documentElement.style.setProperty("--mx", x);
-    document.documentElement.style.setProperty("--my", y);
+    card.addEventListener("pointerleave", () => {
+      card.style.setProperty("--cx", "50%");
+      card.style.setProperty("--cy", "50%");
+    });
   }
-
-  window.addEventListener(
-    "pointermove",
-    (event) => {
-      lastX = event.clientX;
-      lastY = event.clientY;
-      if (raf) return;
-      raf = requestAnimationFrame(commit);
-    },
-    { passive: true }
-  );
-
-  window.addEventListener(
-    "pointerleave",
-    () => {
-      document.documentElement.style.removeProperty("--mx");
-      document.documentElement.style.removeProperty("--my");
-    },
-    { passive: true }
-  );
 }
 
+// 3D Tilt effect for cards
 function setupTilt() {
   const prefersReduced =
     window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -148,7 +160,7 @@ function setupTilt() {
       const nx = px / 100 - 0.5;
       const ny = py / 100 - 0.5;
 
-      const max = 15; // degrees
+      const max = 8; // Subtle tilt angle
       const rx = (-ny * max).toFixed(2);
       const ry = (nx * max).toFixed(2);
 
@@ -185,9 +197,67 @@ function setupTilt() {
   }
 }
 
-setupThemeToggle();
-setupSmoothScroll();
-setupYear();
-setupReveal();
-setupSpotlight();
-setupTilt();
+// Stagger reveal for cards
+function setupStaggeredReveal() {
+  const prefersReduced =
+    window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (prefersReduced) return;
+
+  const cardContainers = document.querySelectorAll(".cards, .hero-points");
+
+  for (const container of cardContainers) {
+    const cards = container.children;
+    Array.from(cards).forEach((card, index) => {
+      card.style.transitionDelay = `${index * 100}ms`;
+    });
+  }
+}
+
+// Header scroll effect
+function setupHeaderScroll() {
+  const header = document.querySelector(".site-header");
+  if (!header) return;
+
+  let lastScroll = 0;
+  let ticking = false;
+
+  function updateHeader() {
+    const currentScroll = window.scrollY;
+
+    if (currentScroll > 50) {
+      header.style.boxShadow = "0 1px 3px rgba(0, 0, 0, 0.08)";
+    } else {
+      header.style.boxShadow = "none";
+    }
+
+    lastScroll = currentScroll;
+    ticking = false;
+  }
+
+  window.addEventListener("scroll", () => {
+    if (!ticking) {
+      requestAnimationFrame(updateHeader);
+      ticking = true;
+    }
+  }, { passive: true });
+}
+
+// Initialize all features
+function init() {
+  setupThemeToggle();
+  setupSmoothScroll();
+  setupYear();
+  setupReveal();
+  setupCardHover();
+  setupTilt();
+  setupStaggeredReveal();
+  setupHeaderScroll();
+}
+
+// Run on DOM ready
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init);
+} else {
+  init();
+}
