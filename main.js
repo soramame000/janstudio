@@ -49,7 +49,34 @@ function setupYear() {
   el.textContent = String(new Date().getFullYear());
 }
 
+function setupReveal() {
+  const prefersReduced =
+    window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (prefersReduced) {
+    document.documentElement.dataset.motion = "reduced";
+    return;
+  }
+
+  document.documentElement.dataset.motion = "full";
+
+  const targets = Array.from(document.querySelectorAll("[data-reveal]"));
+  if (targets.length === 0) return;
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        entry.target.classList.add("is-revealed");
+        io.unobserve(entry.target);
+      }
+    },
+    { root: null, rootMargin: "0px 0px -10% 0px", threshold: 0.12 }
+  );
+
+  for (const el of targets) io.observe(el);
+}
+
 setupThemeToggle();
 setupSmoothScroll();
 setupYear();
-
+setupReveal();
