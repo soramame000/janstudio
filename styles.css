@@ -38,6 +38,10 @@ html[data-theme="dark"] {
   --grid: rgba(255, 255, 255, 0.16);
 }
 
+html[data-motion="full"] {
+  --perspective: 1000px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     scroll-behavior: auto !important;
@@ -522,7 +526,7 @@ img {
   border-radius: var(--radius);
   background: radial-gradient(
     360px 180px at var(--cx, var(--mx, 50%)) var(--cy, var(--my, 20%)),
-    rgba(255, 255, 255, 0.16),
+    rgba(255, 255, 255, 0.22),
     transparent 60%
   );
   opacity: 0.0;
@@ -556,15 +560,15 @@ img {
 }
 
 html[data-motion="full"] [data-tilt="true"].is-tilting {
-  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateZ(0);
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateZ(0) scale(1.01);
 }
 
 html[data-motion="full"] [data-tilt="true"].is-tilting .button {
-  transform: translateZ(14px);
+  transform: translateZ(26px);
 }
 
 html[data-motion="full"] [data-tilt="true"].is-tilting .card-actions {
-  transform: translateZ(18px);
+  transform: translateZ(32px);
 }
 
 .about {

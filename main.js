@@ -148,7 +148,7 @@ function setupTilt() {
       const nx = px / 100 - 0.5;
       const ny = py / 100 - 0.5;
 
-      const max = 9; // degrees
+      const max = 15; // degrees
       const rx = (-ny * max).toFixed(2);
       const ry = (nx * max).toFixed(2);
 
