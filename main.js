@@ -76,7 +76,49 @@ function setupReveal() {
   for (const el of targets) io.observe(el);
 }
 
+function setupSpotlight() {
+  const prefersReduced =
+    window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const isFinePointer =
+    window.matchMedia && window.matchMedia("(pointer: fine)").matches && window.matchMedia("(hover: hover)").matches;
+
+  if (prefersReduced || !isFinePointer) return;
+
+  let raf = 0;
+  let lastX = 0;
+  let lastY = 0;
+
+  function commit() {
+    raf = 0;
+    const x = `${Math.round(lastX)}px`;
+    const y = `${Math.round(lastY)}px`;
+    document.documentElement.style.setProperty("--mx", x);
+    document.documentElement.style.setProperty("--my", y);
+  }
+
+  window.addEventListener(
+    "pointermove",
+    (event) => {
+      lastX = event.clientX;
+      lastY = event.clientY;
+      if (raf) return;
+      raf = requestAnimationFrame(commit);
+    },
+    { passive: true }
+  );
+
+  window.addEventListener(
+    "pointerleave",
+    () => {
+      document.documentElement.style.removeProperty("--mx");
+      document.documentElement.style.removeProperty("--my");
+    },
+    { passive: true }
+  );
+}
+
 setupThemeToggle();
 setupSmoothScroll();
 setupYear();
 setupReveal();
+setupSpotlight();
