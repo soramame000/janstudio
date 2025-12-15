@@ -14,6 +14,7 @@
   --ring: 0 0 0 4px color-mix(in srgb, var(--brand) 22%, transparent);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --grid: rgba(210, 210, 215, 0.5);
+  --perspective: 1200px;
 }
 
 html[data-theme="light"] {
@@ -481,6 +482,7 @@ img {
   display: grid;
   gap: 14px;
   grid-template-columns: 1fr;
+  perspective: var(--perspective);
 }
 
 .card {
@@ -492,6 +494,7 @@ img {
   -webkit-backdrop-filter: saturate(160%) blur(14px);
   box-shadow: 0 0 0 rgba(0, 0, 0, 0);
   position: relative;
+  transform-style: preserve-3d;
   transition: transform 220ms var(--ease-out), box-shadow 220ms var(--ease-out), border-color 220ms var(--ease-out);
 }
 
@@ -517,7 +520,11 @@ img {
   position: absolute;
   inset: 0;
   border-radius: var(--radius);
-  background: radial-gradient(360px 160px at var(--mx, 50%) var(--my, 20%), rgba(255, 255, 255, 0.14), transparent 60%);
+  background: radial-gradient(
+    360px 180px at var(--cx, var(--mx, 50%)) var(--cy, var(--my, 20%)),
+    rgba(255, 255, 255, 0.16),
+    transparent 60%
+  );
   opacity: 0.0;
   transition: opacity 220ms var(--ease-out);
   pointer-events: none;
@@ -541,6 +548,36 @@ img {
 
 .card:hover::after {
   opacity: 1;
+}
+
+[data-tilt="true"] {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+html[data-motion="full"] [data-tilt="true"].is-tilting {
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateZ(0);
+}
+
+html[data-motion="full"] [data-tilt="true"].is-tilting .button {
+  transform: translateZ(14px);
+}
+
+html[data-motion="full"] [data-tilt="true"].is-tilting .card-actions {
+  transform: translateZ(18px);
+}
+
+.about {
+  perspective: var(--perspective);
+}
+
+.about-card {
+  transform-style: preserve-3d;
+}
+
+.kv--table {
+  transform-style: preserve-3d;
+  perspective: var(--perspective);
 }
 
 .card h3 {

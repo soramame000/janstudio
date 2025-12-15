@@ -117,8 +117,77 @@ function setupSpotlight() {
   );
 }
 
+function setupTilt() {
+  const prefersReduced =
+    window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const isFinePointer =
+    window.matchMedia && window.matchMedia("(pointer: fine)").matches && window.matchMedia("(hover: hover)").matches;
+
+  if (prefersReduced || !isFinePointer) return;
+
+  const elements = Array.from(document.querySelectorAll(".card, .about-card, .kv--table"));
+  if (elements.length === 0) return;
+
+  for (const el of elements) {
+    el.dataset.tilt = "true";
+
+    let raf = 0;
+    let last = null;
+
+    function commit() {
+      raf = 0;
+      if (!last) return;
+
+      const rect = el.getBoundingClientRect();
+      const x = Math.min(Math.max(last.clientX - rect.left, 0), rect.width);
+      const y = Math.min(Math.max(last.clientY - rect.top, 0), rect.height);
+
+      const px = rect.width ? (x / rect.width) * 100 : 50;
+      const py = rect.height ? (y / rect.height) * 100 : 50;
+
+      const nx = px / 100 - 0.5;
+      const ny = py / 100 - 0.5;
+
+      const max = 9; // degrees
+      const rx = (-ny * max).toFixed(2);
+      const ry = (nx * max).toFixed(2);
+
+      el.style.setProperty("--rx", `${rx}deg`);
+      el.style.setProperty("--ry", `${ry}deg`);
+      el.style.setProperty("--cx", `${px.toFixed(2)}%`);
+      el.style.setProperty("--cy", `${py.toFixed(2)}%`);
+    }
+
+    el.addEventListener("pointerenter", () => {
+      el.classList.add("is-tilting");
+    });
+
+    el.addEventListener("pointerleave", () => {
+      el.classList.remove("is-tilting");
+      el.style.removeProperty("--rx");
+      el.style.removeProperty("--ry");
+      el.style.removeProperty("--cx");
+      el.style.removeProperty("--cy");
+      last = null;
+      if (raf) cancelAnimationFrame(raf);
+      raf = 0;
+    });
+
+    el.addEventListener(
+      "pointermove",
+      (event) => {
+        last = event;
+        if (raf) return;
+        raf = requestAnimationFrame(commit);
+      },
+      { passive: true }
+    );
+  }
+}
+
 setupThemeToggle();
 setupSmoothScroll();
 setupYear();
 setupReveal();
 setupSpotlight();
+setupTilt();
